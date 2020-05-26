@@ -9,7 +9,7 @@ module.exports = ( req , res ,next) => {
         }
         else {
             console.log(datosUser.perfil)
-            if(datosUser.perfil !== 'admin') {
+            if(datosUser.perfil !== 'Admin') {
                 return res.status(403).json({mensaje : 'Acceso denegado por no ser admin'})
             }
             else {

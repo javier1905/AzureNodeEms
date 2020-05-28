@@ -3,19 +3,7 @@ if(process.env.NODE_ENV === 'development'){ require('colors') }
 
 var URI
 
-if(process.env.NODE_ENV === 'production'){
-    URI = {
-        user: process.env.USERSQL,
-        password: process.env.PASSWORDSQL,
-        database: process.env.DATABASESQL,
-        server:process.env.SERVERSQL,
-        options:{
-            enableArithAbort:true,
-            encrypt:false
-        },
-    }
-}
-else{
+if(process.env.NODE_ENV === 'development'){
     URI = {
         user: 'DBjav', /* DBjav emsDB  */
         password: 'belgrano455',
@@ -36,6 +24,18 @@ else{
             min:0,
             idleTimeoutMillis:30000,
         }
+    }
+}
+else{
+    URI = {
+        user: process.env.USERSQL,
+        password: process.env.PASSWORDSQL,
+        database: process.env.DATABASESQL,
+        server:process.env.SERVERSQL,
+        options:{
+            enableArithAbort:true,
+            encrypt:false
+        },
     }
 }
 

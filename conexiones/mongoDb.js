@@ -4,11 +4,11 @@ require('colors')
 }
 
 var URI;
-if(process.env.NODE_ENV === 'production'){
-     URI = process.env.MONGODB_URI
+if(process.env.NODE_ENV === 'development'){
+     URI = 'mongodb://localhost:5000:27017/usuariosEMS'
 }
 else{
-     URI = 'mongodb://localhost:5000:27017/usuariosEMS'
+     URI = process.env.MONGODB_URI     
 }
 
 mongoose.connect(URI,{useNewUrlParser:true,useUnifiedTopology: true});

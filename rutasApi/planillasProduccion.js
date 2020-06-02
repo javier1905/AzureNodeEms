@@ -18,8 +18,10 @@ router.post ( '/delete' , async ( req , res ) => {
         estado = 0
         where id = ${ parseInt ( idPlanilla ) }`
         )
-        cerrarConexionPOOL (  )
-        res.json ( { mensaje : 'Eliminacion exitosa !' } )
+        if(result) {
+            cerrarConexionPOOL (  )
+            res.json ( { mensaje : 'Eliminacion exitosa !' } )
+        }
     }
     catch (e ) {
         cerrarConexionPOOL (  )
@@ -261,34 +263,6 @@ router.post( '/update', async ( req , res ) => {
         if ( !err ) {
             const metodoTransaccion =  async (  ) => {
                 try {
-                    // var idZonasDelete = ''
-                    // var idRechazosDelete = ''
-                    // var idOperariosDelete = ''
-                    // var idPmDelete = ''
-                    // vecParadasMaquinaSeleccionada.forEach ( ( p , ip ) => {
-                    //     if(( vecParadasMaquinaSeleccionada.length -1 )  === ip  ) {
-                    //         idPmDelete += ` ${parseInt ( p.idParadaMaquinaXplanilla )}  `
-                    //     }
-                    //     else {
-                    //         idPmDelete += ` ${parseInt ( p.idParadaMaquinaXplanilla )} , `
-                    //     }
-                    // } )
-                    // vecOperarios.forEach ( ( o , io ) => {
-                    //     idOperariosDelete += ` ${parseInt( o.idTrabajadorXplanilla )} , `
-                    //     o.vecRechazo.forEach ( ( r , ir ) => {
-                    //         idRechazosDelete += ` ${parseInt ( r.idRechazoXtrabajadorYplanilla )} , `
-                    //         r.vecZonas.forEach ( ( z , iz ) => {
-                    //             idZonasDelete += ` ${parseInt ( z.idZona )} , `
-                    //         })
-                    //     } )
-                    // } )
-                    // if ( idOperariosDelete !== '' ) { idOperariosDelete =  idOperariosDelete.trim (  ).substring ( 0 , idOperariosDelete.trim (  ).length - 1 )}
-                    // if ( idRechazosDelete !== '' ) { idRechazosDelete =  idRechazosDelete.trim (  ).substring ( 0 , idRechazosDelete.trim (  ).length - 1 )}
-                    // if ( idZonasDelete !== '' ) { idZonasDelete =  idZonasDelete.trim (  ).substring ( 0 , idZonasDelete.trim (  ).length - 1 )}
-                    // const resultDelete = await deleteZonasRechazosOperariosPm.query ( ` delete zonas_x_rechazo_x_planilla where id in ( ${ idZonasDelete === '' ? null : idZonasDelete} ) ;
-                    // delete rechazos_x_trabajador_y_planilla where id in ( ${ idRechazosDelete === '' ? null : idRechazosDelete } ) ;
-                    // delete trabajador_x_planilla where id in ( ${ idOperariosDelete === '' ? null : idOperariosDelete } ) ;
-                    // delete paradas_maquinas_x_planilla where id in ( ${ idPmDelete === '' ? null : idPmDelete } ) ; ` )
                     const resultDelete = await deleteZonasRechazosOperariosPm.query(`
                         delete zonas_x_rechazo_x_planilla
                         where id_rechazos_x_trabajador_y_planilla in ( (select r.id

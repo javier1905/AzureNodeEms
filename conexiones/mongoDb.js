@@ -19,9 +19,9 @@ conexion.on('error',console.error.bind(console,'error de conexion'));
 
 conexion.once('open',()=>{
      if(process.env.NODE_ENV === 'development'){
-          console .log('Conectado a MONGODB'.red)
+          console.log('Conectado a MONGODB'.red)
      } 
      else{
-          console .log('Conectado a MONGODB')
+          console.log('Conectado a MONGODB')
      }
 })

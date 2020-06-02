@@ -8,7 +8,6 @@ module.exports = ( req , res ,next) => {
             return res.status(403).json({mensaje : e.message})
         }
         else {
-            console.log(datosUser.perfil)
             if(datosUser.perfil !== 'Admin') {
                 return res.status(403).json({mensaje : 'Acceso denegado por no ser admin'})
             }

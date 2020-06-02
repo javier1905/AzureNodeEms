@@ -33,9 +33,6 @@ router.post('/perfiles',async (req,res)=>{
     catch(e){
         res.status(403).json({mensaje:e.message})
     }
-
-
-
 })
 
 router.get('/:id',async (req,res)=>{
@@ -54,7 +51,7 @@ router.post('/',async (req,res)=>{
         password = await bcryp.hashSync(password)
         const newUser= new Usuario({userName,password,email,nombre,apellido,perfil})
         const dato = await newUser.save()
-        res.status(200).json({mensaje:'Usuario guardado exitosamente !'})
+        if(dato){ res.status(200).json({mensaje:'Usuario guardado exitosamente !'}) }
     }
     catch(err){
         res.status(403).json({error:err.message})

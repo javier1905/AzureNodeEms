@@ -65,12 +65,9 @@ ConexionSQL.cerrarConexion = async function (){
 const conexiones = {}
 
 ConexionSQL.abrirConexionPOOL = async name =>{
-   
     if(!Object.prototype.hasOwnProperty.call(conexiones,name)){
-        
         const newConexion = new mssql.ConnectionPool(URI)
         const close = newConexion.close.bind(newConexion)
-       
         newConexion.close = (...args) => {
             delete conexiones[name]
             return close(...args)

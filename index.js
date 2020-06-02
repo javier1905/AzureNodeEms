@@ -1,6 +1,6 @@
 const express = require('express')
 const cors = require('cors')
-var morgan;
+var morgan
 
 if(process.env.NODE_ENV === 'development'){
     require('colors')

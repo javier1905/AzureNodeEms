@@ -109,4 +109,28 @@ router.post ('/detalleParaMaquinaXpm' , async (req,res) => {
         res.json({status : 403 , mensaje : e.message})
     }
 })
+
+router.post ( '/rechazosXpieza' , async ( req , res) => {
+    const { fechaFundicionDesde , fechaFundicionHasta , idMaquina , idPieza , idMolde } = req.body
+    const {abrirConexionPOOL , cerrarConexionPOOL} = require('../conexiones/sqlServer')
+    const mssql = require('mssql')
+    try{
+        const conexion = await abrirConexionPOOL('consultaRechazosXmaquina')
+        const myRequest =  new mssql.Request(conexion)
+        myRequest.input('@fechaFundicionDesde' , mssql.Date , fechaFundicionDesde)
+        myRequest.input('@fechaFundicionHasta' , mssql.Date , fechaFundicionHasta)
+        myRequest.input('@idMaquina' , mssql.Int , idMaquina)
+        myRequest.input('@idPieza' , mssql.Int , idPieza)
+        myRequest.input('@idMolde' , mssql.Int , idMolde)
+        const result = await myRequest.execute('pa_rechazosXpiezas')
+        if(result){
+            cerrarConexionPOOL()
+            res.json(result.recordset)
+        }
+    }
+    catch(e){
+        cerrarConexionPOOL()
+        res.json({status : 403 , mensaje : e.message})
+    }
+})
 module.exports = router

@@ -117,11 +117,11 @@ router.post ( '/rechazosXpieza' , async ( req , res) => {
     try{
         const conexion = await abrirConexionPOOL('consultaRechazosXmaquina')
         const myRequest =  new mssql.Request(conexion)
-        myRequest.input('@fechaFundicionDesde' , mssql.Date , fechaFundicionDesde)
-        myRequest.input('@fechaFundicionHasta' , mssql.Date , fechaFundicionHasta)
-        myRequest.input('@idMaquina' , mssql.Int , idMaquina)
-        myRequest.input('@idPieza' , mssql.Int , idPieza)
-        myRequest.input('@idMolde' , mssql.Int , idMolde)
+        myRequest.input('fechaFundicionDesde' , mssql.Date , fechaFundicionDesde)
+        myRequest.input('fechaFundicionHasta' , mssql.Date , fechaFundicionHasta)
+        myRequest.input('idMaquina' , mssql.Int , idMaquina)
+        myRequest.input('idPieza' , mssql.Int , idPieza)
+        myRequest.input('idMolde' , mssql.Int , idMolde)
         const result = await myRequest.execute('pa_rechazosXpiezas')
         if(result){
             cerrarConexionPOOL()

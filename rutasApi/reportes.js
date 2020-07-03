@@ -133,4 +133,46 @@ router.post ( '/rechazosXpieza' , async ( req , res) => {
         res.json({status : 403 , mensaje : e.message})
     }
 })
+
+router.post('/calorias' , async ( req , res ) => {
+    const { fechaProduccionDesde , fechaProduccionHasta } = req.body
+    const { abrirConexionPOOL , cerrarConexionPOOL  } = require ('../conexiones/sqlServer')
+    try{
+        const conexion = await abrirConexionPOOL( 'reporteCalorias' )
+        const mssql = require ( 'mssql' )
+        const myRequest = new mssql.Request ( conexion )
+        myRequest.input( 'fechaProduccionDesde' , mssql.Date , fechaProduccionDesde )
+        myRequest.input( 'fechaProduccionHasta' , mssql.Date , fechaProduccionHasta )
+        const result = await myRequest.execute( 'pa_caloriasXtrabajador' )
+        if(result) {
+            cerrarConexionPOOL ()
+            res.json( result.recordset )
+        }
+    }
+    catch (e) {
+        cerrarConexionPOOL()
+        res.json({  status : 403 , mensaje : e.message })
+    }
+})
+router.post('/detalleCalorias' , async ( req , res ) => {
+    const { fechaProduccionDesde , fechaProduccionHasta , idTrabajador } = req.body
+    const { abrirConexionPOOL , cerrarConexionPOOL  } = require ('../conexiones/sqlServer')
+    try{
+        const conexion = await abrirConexionPOOL( 'reporteDetalleCalorias' )
+        const mssql = require ( 'mssql' )
+        const myRequest = new mssql.Request ( conexion )
+        myRequest.input( 'fechaProduccionDesde' , mssql.Date , fechaProduccionDesde )
+        myRequest.input( 'fechaProduccionHasta' , mssql.Date , fechaProduccionHasta )
+        myRequest.input( 'idTrabajador' , mssql.Int , idTrabajador )
+        const result = await myRequest.execute( 'pa_detalleCaloriasTrabajadore' )
+        if(result) {
+            cerrarConexionPOOL ()
+            res.json( result.recordset )
+        }
+    }
+    catch (e) {
+        cerrarConexionPOOL()
+        res.json({  status : 403 , mensaje : e.message })
+    }
+})
 module.exports = router

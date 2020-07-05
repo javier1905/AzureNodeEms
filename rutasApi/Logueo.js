@@ -1,41 +1,49 @@
 const {Router} = require('express')
 const bcrypt =require('bcrypt-nodejs')
-const Usuario = require('../esquemasMongo/esquemaUsuarios')
+// const Usuario = require('../esquemasMongo/esquemaUsuarios')
 const {secret} = require('../CONFIG')
 const jwt = require('jsonwebtoken')
+// const CONFIG = require('../CONFIG')
 
 const router = Router();
 
 router.post('/',async (req,res,next)=>{
-
+    const { abrirConexionPOOL , cerrarConexionPOOL} = require('../conexiones/sqlServer')
+    const {userName , password } = req.body
     try{
-        const user = await Usuario.find({userName:req.body.userName})
-        if(!user[0]){
-            res.status(403).json({mensaje:'Usuario Inexistente !'})
-        }
-        else{
-            const verificaPass = await bcrypt.compareSync(req.body.password,user[0].password)
-            if(!verificaPass){
+        const conexion = await abrirConexionPOOL('consultaUsuario')
+        const {Request , VarChar} = require('mssql')
+        const myRequest = new Request(conexion)
+        myRequest.input('userName' , VarChar , userName)
+        const usuario = await myRequest.execute('pa_getUsuarioXnombreUsuario')
+        if(usuario.recordset.userName){
+            cerrarConexionPOOL()
+            if( !bcrypt.compareSync(password , usuario.recordset.password )) {
                 res.status(403).json({mensaje:'Password Incorrecta'})
             }
-            else{
+            else {
                 const miUsuario = {
-                    userName:user[0].userName,
-                    email:user[0].email,
-                    nombre:user[0].nombre,
-                    apellido:user[0].apellido,
-                    perfil:user[0].perfil
+                    userName:usuario.recordset.userName ,
+                    email:usuario.recordset.email ,
+                    nombre:usuario.recordset.nombreUsuario ,
+                    apellido:usuario.recordset.apellidoUsuario ,
+                    perfil:usuario.recordset.nombrePerfil
                 }
-                jwt.sign(miUsuario,secret,{expiresIn:14400},(e,token)=>{
-                    e? res.status(404).json({mensaje:'Error al generar el token'}):
-                    res.status(200).json({token})
+                jwt.sign(miUsuario , secret, {expiresIn:14400} ,  (e , token) => {
+                    if (e) { res.status(404).json({mensaje:'Error al generar el token'})  }
+                    else{  res.json ({token}) }
                 })
             }
         }
+        else{
+            cerrarConexionPOOL()
+            res.status(403).json({mensaje:'Usuario Inexistente !'})
+        }
     }
     catch(e){
+        cerrarConexionPOOL()
         res.status(404).json({e});
     }
 })
- 
+
 module.exports = router

@@ -1,10 +1,8 @@
 const {Router} = require('express')
-const bcrypt =require('bcrypt-nodejs')
+const bcrypt =require('bcrypt')
 // const Usuario = require('../esquemasMongo/esquemaUsuarios')
 const {secret} = require('../CONFIG')
 const jwt = require('jsonwebtoken')
-// const CONFIG = require('../CONFIG')
-
 const router = Router();
 
 router.post('/',async (req,res,next)=>{
@@ -16,18 +14,19 @@ router.post('/',async (req,res,next)=>{
         const myRequest = new Request(conexion)
         myRequest.input('userName' , VarChar , userName)
         const usuario = await myRequest.execute('pa_getUsuarioXnombreUsuario')
-        if(usuario.recordset.userName){
+        const pw = String(usuario.recordset[0].password).trim()
+        if(usuario.recordset.length > 0){
             cerrarConexionPOOL()
-            if( !bcrypt.compareSync(password , usuario.recordset.password )) {
+            if( !bcrypt.compareSync(password , pw)) {
                 res.status(403).json({mensaje:'Password Incorrecta'})
             }
             else {
                 const miUsuario = {
-                    userName:usuario.recordset.userName ,
-                    email:usuario.recordset.email ,
-                    nombre:usuario.recordset.nombreUsuario ,
-                    apellido:usuario.recordset.apellidoUsuario ,
-                    perfil:usuario.recordset.nombrePerfil
+                    userName:usuario.recordset[0].userName ,
+                    email:usuario.recordset[0].email ,
+                    nombre:usuario.recordset[0].nombreUsuario ,
+                    apellido:usuario.recordset[0].apellidoUsuario ,
+                    perfil:usuario.recordset[0].nombrePerfil
                 }
                 jwt.sign(miUsuario , secret, {expiresIn:14400} ,  (e , token) => {
                     if (e) { res.status(404).json({mensaje:'Error al generar el token'})  }
@@ -42,7 +41,7 @@ router.post('/',async (req,res,next)=>{
     }
     catch(e){
         cerrarConexionPOOL()
-        res.status(404).json({e});
+        res.status(404).json({e})
     }
 })
 

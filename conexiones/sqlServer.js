@@ -4,12 +4,32 @@ if(process.env.NODE_ENV === 'development'){ require('colors') }
 var URI
 
 if(process.env.NODE_ENV === 'development'){
+    // URI = {
+    //     user: 'DBjav', /* DBjav emsDB  */
+    //     password: 'belgrano455',
+    //     database: 'EMS_DB_SQL',
+    //     port:1433,
+    //     server:'DESKTOP-G1I097C', /* DESKTOP-G1I097C  PC2360 */
+    //     options:{
+    //         appName:'ems-node-api',
+    //         enableArithAbort:true,
+    //         encrypt:false
+    //     }
+    //     ,
+    //     connectionTimeOut:150000,
+    //     driver:'tedious',
+    //     stream:false,
+    //     pool:{
+    //         max:20,
+    //         min:0,
+    //         idleTimeoutMillis:30000,
+    //     }
+    // }
     URI = {
-        user: 'DBjav', /* DBjav emsDB  */
-        password: 'belgrano455',
-        database: 'EMS_DB_SQL',
-        port:1433,
-        server:'DESKTOP-G1I097C', /* DESKTOP-G1I097C  PC2360 */
+        user: 'javier_85_SQLLogin_1', /* DBjav emsDB  */
+        password: 'lglpiq7v7o',
+        database: 'EMSDBSQL',
+        server:'EMSDBSQL.mssql.somee.com', /* DESKTOP-G1I097C  PC2360 */
         options:{
             appName:'ems-node-api',
             enableArithAbort:true,

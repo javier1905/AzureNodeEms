@@ -30,6 +30,7 @@ servidor.use('/api/authRouterReact/nivel4',require('./rutasApi/authAccesosReact/
 servidor.use('/api/authRouterReact/nivel5',require('./rutasApi/authAccesosReact/authNivel5RouterReact'))
 servidor.use('/api/maquinas',require('./rutasApi/maquinas'))
 servidor.use('/api/usuarios',require('./rutasApi/authAccesos/authAdminRouter'),require('./rutasApi/usuarios'))
+// servidor.use('/api/usuarios',require('./rutasApi/usuarios'))
 servidor.use('/api/logueo',require('./rutasApi/Logueo'))
 servidor.use('/api/autentificasion',require('./rutasApi/Autentificasion'))
 servidor.use('/api/piezas',require('./rutasApi/piezas'))
